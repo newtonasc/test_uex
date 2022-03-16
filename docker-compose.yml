@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  uex_db:
+    image: mysql
+    container_name: uex_mysql
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./Db:/var/lib/mysql
+    ports: 
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=38Ecf3c881
+      - MYSQL_DATABASE=uex_db
+      - MYSQL_USER=user_uex
+      - MYSQL_PASSWORD=29NaN1f53a   
+  
+  uex_api:
+    build:  Api
+    container_name: uex_api
+    volumes:
+      - ./Api:/var/www/html/
+    working_dir: /var/www/html/
+    ports: 
+      - 8000:80
+    links:
+      - uex_db
+    environment:
+      XDEBUG_CONFIG: remote_host=host.docker.internal
+
+networks:
+  default:
+    name: uex-network

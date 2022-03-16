@@ -1,0 +1,26 @@
+
+
+Code Coverage Report:    
+  2022-03-16 00:06:16    
+                         
+ Summary:                
+  Classes: 61.54% (8/13) 
+  Methods: 73.68% (14/19)
+  Lines:   85.33% (64/75)
+
+App\Console\Kernel
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  2/  2)
+App\Exceptions\Handler
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  1/  1)
+App\Http\Controllers\API\BaseController
+  Methods: 100.00% ( 2/ 2)   Lines: 100.00% (  5/  5)
+App\Http\Controllers\API\ContactController
+  Methods: 100.00% ( 5/ 5)   Lines: 100.00% ( 30/ 30)
+App\Http\Resources\Contact
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% ( 15/ 15)
+App\Providers\AuthServiceProvider
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  1/  1)
+App\Providers\EventServiceProvider
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  1/  1)
+App\Providers\RouteServiceProvider
+  Methods: 100.00% ( 2/ 2)   Lines: 100.00% (  9/  9)
