@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\ContactController;
+use App\Http\Controllers\API\ContactTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,4 +19,6 @@ use App\Http\Controllers\API\ContactController;
   Route::resource('contacts', ContactController::class);
   Route::put('contacts/update/{id}', [ContactController::class, 'update']);
   Route::post('contacts/search', [ContactController::class, 'search']);
+  Route::post('contacts/filter', [ContactController::class, 'filter']);
+  Route::resource('contact-types', ContactTypeController::class);
 

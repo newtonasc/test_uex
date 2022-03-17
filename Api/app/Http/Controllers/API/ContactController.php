@@ -12,7 +12,7 @@ use Illuminate\Http\JsonResponse;
 class ContactController extends BaseController {
     /**
      * @OA\Get(path="contacts", summary="Lista de contatos", tags={"Contacts"},
-     *    @OA\Response(description="Listagem dos contatos cadastrados", response="200", description="Contatos encontrados.",
+     *    @OA\Response(description="Listagem dos contatos cadastrados", response="200",
      *      content={
      *          @OA\MediaType(mediaType="application/json",
      *              @OA\Schema(
@@ -42,11 +42,89 @@ class ContactController extends BaseController {
         return $this->sendResponse(ContactResource::collection($contacts), 'Contatos encontrados.');
     }   
     
+    /**
+     * @OA\Get(path="contacts/search", summary="Pesquisa de contatos", tags={"Contacts"},
+     *    @OA\Response(description="Pesquisa de contatos cadastrados", response="200",
+     *    @OA\RequestBody(required=true, description="Cadastro - obrigatório",
+     *      content={
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(property="termo", type="string", description="Termo as ser pesquisado")
+     *              )
+     *          )
+     *      },
+     *      content={
+     *          @OA\MediaType(mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(property="name", type="string", description="Nome do contato", example="John Due"),
+     *                  @OA\Property(property="phone", type="string", description="Telefone do contato", example="(41) 992129212)"),
+     *                  @OA\Property(property="cpf", type="strig", description="CPF do contato", example="12345678910"),
+     *                  @OA\Property(property="address", type="string", description="Endereço do contato", example="Rua Almirante Garnier"),
+     *                  @OA\Property(property="number", type="string", description="Número do endereço do contato", example="100"),
+     *                  @OA\Property(property="neighborhood", type="string", description="Bairro do contato", example="Bairro Alto"),
+     *                  @OA\Property(property="city", type="string", description="Cidade do contato", example="Curitiba"),
+     *                  @OA\Property(property="state", type="string", description="Stado do contato", example="Paraná"),
+     *                  @OA\Property(property="cep", type="string", description="CEP do contato", example="81100100"),
+     *                  @OA\Property(property="latitude", type="string", description="Latitude do endereço do contato", example="-25.441105"),
+     *                  @OA\Property(property="longitude", type="string", description="Longitude do endereço do contato", example="-49.276855"),
+     *                  @OA\Property(property="type_id", type="integer", description="Id do tipo de contato")
+     *              ),
+     *          )
+     *      },
+     *    ),
+     *    @OA\Response(response="200", description="Contatos encontrados.")
+     * )
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function search(Request $request): JsonResponse {
         $term = $request->input('termo');
         $contacts = Contact::where('name', 'LIKE', '%'.$term.'%')->OrWhere('cpf', 'LIKE', '%'.$term.'%')->OrWhere('phone', 'LIKE', '%'.$term.'%')->get();
         return $this->sendResponse(ContactResource::collection($contacts), 'Contatos encontrados.');
-    }     
+    }   
+    
+    /**
+     * @OA\Get(path="contacts/filter", summary="Filtro de tipos de contatos", tags={"Contacts"},
+     *    @OA\Response(description="Filtro de contatos cadastrados por tipo", response="200",
+     *    @OA\RequestBody(required=true, description="Cadastro - obrigatório",
+     *      content={
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(property="termo", type="string", description="Termo as ser filtrado")
+     *              )
+     *          )
+     *      },
+     *      content={
+     *          @OA\MediaType(mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(property="name", type="string", description="Nome do contato", example="John Due"),
+     *                  @OA\Property(property="phone", type="string", description="Telefone do contato", example="(41) 992129212)"),
+     *                  @OA\Property(property="cpf", type="strig", description="CPF do contato", example="12345678910"),
+     *                  @OA\Property(property="address", type="string", description="Endereço do contato", example="Rua Almirante Garnier"),
+     *                  @OA\Property(property="number", type="string", description="Número do endereço do contato", example="100"),
+     *                  @OA\Property(property="neighborhood", type="string", description="Bairro do contato", example="Bairro Alto"),
+     *                  @OA\Property(property="city", type="string", description="Cidade do contato", example="Curitiba"),
+     *                  @OA\Property(property="state", type="string", description="Stado do contato", example="Paraná"),
+     *                  @OA\Property(property="cep", type="string", description="CEP do contato", example="81100100"),
+     *                  @OA\Property(property="latitude", type="string", description="Latitude do endereço do contato", example="-25.441105"),
+     *                  @OA\Property(property="longitude", type="string", description="Longitude do endereço do contato", example="-49.276855"),
+     *                  @OA\Property(property="type_id", type="integer", description="Id do tipo de contato")
+     *              ),
+     *          )
+     *      },
+     *    ),
+     *    @OA\Response(response="200", description="Contatos encontrados.")
+     * )
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function filter(Request $request): JsonResponse {
+        $term = $request->input('termo');
+        $contacts = Contact::where('type_id', $term)->get();
+        return $this->sendResponse(ContactResource::collection($contacts), 'Contatos encontrados.');
+    }   
 
    /**
      * @OA\Post(path="contacts", summary="Cadastro de contatos", tags={"Contacts"},
