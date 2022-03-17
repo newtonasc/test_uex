@@ -5,7 +5,7 @@ export default {
 
     data() {
         return {
-            mapsApiKey: 'AIzaSyDkRfQvApdiHD2NGc49Agpa8WflYjwgMCQ',
+            mapsApiKey: process.env.VUE_APP_MAP_KEY,
             position: {
                 lat: -25.4437172,
                 lng: -49.2789859
@@ -26,6 +26,7 @@ export default {
             this.renderMap();
         });
         this.$bus.$on('markPin', marker => {
+            if (!this.map) return;
             if (marker.status) {
                 this.markers[marker.id].setIcon(this.iconHover);
             } else {
@@ -33,6 +34,7 @@ export default {
             }
         });
         this.$bus.$on('InfoWindowPin', id => {
+            if (!this.map) return;
             this.closePreviousInfoWindow();
             this.infoWindow[id].open(this.map, this.markers[id]);
         });
@@ -56,6 +58,7 @@ export default {
                     streetViewControl: false
                 };
                 this.map = new google.maps.Map(document.getElementById('map'), mapParams);
+                if (!this.map) return;
                 for (const point of data) {
                     this.markers[point.id] = new google.maps.Marker({
                         position: {

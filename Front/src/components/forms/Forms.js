@@ -40,7 +40,7 @@ export default {
             loadingContactTypeList: false,
             listContactTypes: [],
             urlApi: 'http://localhost:8000/api',
-            mapsApiKey: 'AIzaSyDkRfQvApdiHD2NGc49Agpa8WflYjwgMCQ'
+            mapsApiKey: process.env.VUE_APP_MAP_KEY
         }
     },
 
@@ -140,13 +140,16 @@ export default {
                             if (item.types[0] === 'postal_code') gcep = item.short_name;
                         }                        
                         if (groute || gnumber || gneighborhood) {
-                            if (groute) this.form.address = groute;
-                            if (gnumber) this.form.number = gnumber;
-                            if (gneighborhood) this.form.neighborhood = gneighborhood;
+                            this.form.address = groute;
+                            this.form.number = gnumber;
+                            this.form.neighborhood = gneighborhood;
                         } else if (gcity || gstate) {
                             let separator = ' - ';
                             if (!gcity || !gstate) separator = '';
                             this.form.address = `${gcity}${separator}${gstate}`;
+                            this.form.number = '';
+                            this.form.neighborhood = '';
+                            this.form.cep = '';
                         } 
                         if (gstate) {   
                             this.form.state = gstate;

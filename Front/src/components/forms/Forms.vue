@@ -61,7 +61,6 @@
                     </b-col>
                 </b-row>
             </div>
-            {{ form.latitude + ' - ' + form.longitude}}
             <div class="content-buttons text-right">
                 <b-button variant="link" size="sm" @click="close">Cancelar</b-button>
                 <b-button variant="info" size="sm" @click="save">Salvar</b-button>

@@ -10,7 +10,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 import VueTheMask from 'vue-the-mask';
 import VueGoogleMap from 'vuejs-google-maps';
 import 'vuejs-google-maps/dist/vuejs-google-maps.css';
-
+import dotenv from 'dotenv';
+dotenv.config();
 Vue.config.productionTip = false;
 Vue.use(Bootstrap);
 Vue.use(BootstrapVueIcons);
@@ -18,7 +19,7 @@ Vue.use(Snotify);
 Vue.use(VueTheMask);
 Vue.use(VueGoogleMap, {
     load: {
-        apiKey: 'AIzaSyDkRfQvApdiHD2NGc49Agpa8WflYjwgMCQ',
+        apiKey: process.env.VUE_APP_MAP_KEY,
         libraries: ['places', 'visualization ']
     }
 });
