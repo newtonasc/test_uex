@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 
 class ContactTypeController extends BaseController {
     /**
-     * @OA\Get(path="contacts", summary="Lista de tipos de contato", tags={"Contact types"},
+     * @OA\Get(path="contact-types", summary="Lista de tipos de contato", tags={"Contact types"},
      *    @OA\Response(description="Listagem dos tipos de contato cadastrados", response="200", description="Tipos de contato encontrados.",
      *      content={
      *          @OA\MediaType(mediaType="application/json",

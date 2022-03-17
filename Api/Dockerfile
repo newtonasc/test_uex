@@ -1,5 +1,5 @@
 FROM php:8.1.3-fpm
-RUN apt-get update -y && apt-get install -y libmcrypt-dev openssl mcrypt curl vim
+RUN apt-get update -y && apt-get install -y libmcrypt-dev openssl mcrypt curl vim git zip unzip
 RUN docker-php-ext-install pdo pdo_mysql
 RUN pecl install xdebug; \
     docker-php-ext-enable xdebug

@@ -14,7 +14,8 @@ export default {
             removeContact: '',
             contactId: null,
             activeId: 0,
-            checkedId: 0
+            checkedId: 0, 
+            termSearch: ''
         }
     }, 
 
@@ -127,6 +128,53 @@ export default {
         },
         hidePin(id) {
             this.$bus.$emit('markPin', { id: id, status: false });
+        },
+        sentSearch() {
+            if (!this.termSearch) return;
+            this.loadingContactList = true;
+            axios({
+                url: `${this.urlApi}/contacts/search`,
+                data: { 
+                    term: this.termSearch,
+                    filter: this.selectedContactType
+                },
+                method: 'POST'
+            })
+            .then(response => {
+                this.listContacts = response.data.data;
+            })
+            .catch(error => {
+                this.displayNotification('error', error.message, 'Erro geral');
+            })
+            .finally(() => {
+                this.loadingContactList = false;
+                this.$bus.$emit('renderMap', this.listContacts);
+            });
+        },
+        cleanSearch() {
+            this.termSearch = '';
+            this.loadContactList();
+        },
+        changeContactType() {
+            if (this.selectedContactType == 0) return this.loadContacTypetList();
+            this.loadingContactList = true;
+            axios({
+                url: `${this.urlApi}/contacts/filter`,
+                data: { 
+                    filter: this.selectedContactType
+                 },
+                method: 'POST'
+            })
+            .then(response => {
+                this.listContacts = response.data.data;
+            })
+            .catch(error => {
+                this.displayNotification('error', error.message, 'Erro geral');
+            })
+            .finally(() => {
+                this.loadingContactList = false;
+                this.$bus.$emit('renderMap', this.listContacts);
+            });
         }
     }
 }

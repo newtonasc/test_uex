@@ -19,7 +19,7 @@ Vue.use(Snotify);
 Vue.use(VueTheMask);
 Vue.use(VueGoogleMap, {
     load: {
-        apiKey: process.env.VUE_APP_MAP_KEY,
+        apiKey: 'AIzaSyDkRfQvApdiHD2NGc49Agpa8WflYjwgMCQ',
         libraries: ['places', 'visualization ']
     }
 });

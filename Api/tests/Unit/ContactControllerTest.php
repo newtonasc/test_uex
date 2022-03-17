@@ -33,11 +33,28 @@ class ContactControllerTest extends TestCase {
         $this->assertEquals(200, $store->status());
         $this->assertEquals($store->getData()->data->name, $fakeName);
         $contactId = $store->getData()->data->id;
-        // Test update success
-        
-        $result = $this->post('/api/contacts/search', ['termo' => $fakeName]);
+        // Test search success        
+        $result = $this->post('/api/contacts/search', ['term' => $fakeName]);
         $this->assertEquals(200, $result->status());
+        // Clean dataset
+        $delete = $this->delete('/api/contacts/'.$contactId);
+        $this->assertTrue($delete->getData()->success);
+        $this->assertEquals(200, $delete->status());
+    }
 
+    public function testFilter() {
+        $data = $this->mockData();
+        $fakeName = $this->faker->name;
+        $data['name'] = $fakeName;
+        // Create dataset
+        $store = $this->post('/api/contacts', $data);
+        $this->assertTrue($store->getData()->success);
+        $this->assertEquals(200, $store->status());
+        $this->assertEquals($store->getData()->data->name, $fakeName);
+        $contactId = $store->getData()->data->id;
+        // Test filter success        
+        $result = $this->post('/api/contacts/filter', ['filter' => 1]);
+        $this->assertEquals(200, $result->status());
         // Clean dataset
         $delete = $this->delete('/api/contacts/'.$contactId);
         $this->assertTrue($delete->getData()->success);

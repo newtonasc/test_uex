@@ -5,7 +5,7 @@ export default {
 
     data() {
         return {
-            mapsApiKey: process.env.VUE_APP_MAP_KEY,
+            mapsApiKey: 'AIzaSyDkRfQvApdiHD2NGc49Agpa8WflYjwgMCQ',
             position: {
                 lat: -25.4437172,
                 lng: -49.2789859
@@ -21,7 +21,6 @@ export default {
 
     created() {
         this.$bus.$on('renderMap', contacts => {
-            if (!contacts) this.defaultPosition();
             this.contacts = contacts;
             this.renderMap();
         });
@@ -46,51 +45,103 @@ export default {
 
     methods: {
         renderMap() {
-            const data = this.contacts;
             setTimeout(() => {
-                const mapParams = {
-                    zoom: 10,
-                    center: new google.maps.LatLng(this.position),
-                    mapTypeId: google.maps.MapTypeId.ROADMAP,
-                    mapTypeControl: true,
-                    disableDoubleClickZoom: true,
-                    zoomControlOptions: true,
-                    streetViewControl: false
-                };
-                this.map = new google.maps.Map(document.getElementById('map'), mapParams);
-                if (!this.map) return;
-                for (const point of data) {
-                    this.markers[point.id] = new google.maps.Marker({
-                        position: {
-                            lat: parseFloat(point.latitude), 
-                            lng: parseFloat(point.longitude)
-                        },
-                        icon: this.icon,
-                        draggable: false,
-                        map: this.map,
-                        title: point.name
-                    });
-                    this.infoWindow[point.id] = new google.maps.InfoWindow({
-                        content: `${point.address}, ${point.number}
-                        ${point.neighborhood} - ${point.city}/${point.state}
-                        ${point.cep}
-                        `
-                    });
-                    this.markers[point.id].addListener('click', () => {
-                        this.infoWindow[point.id].open(this.map, this.markers[point.id]);
-                        this.$bus.$emit('checkContact', point.id);
-                    });
-                    this.infoWindow[point.id].addListener('closeclick', () => {
-                        this.$bus.$emit('checkContact', 0);
-                    });
-                    this.markers[point.id].addListener('mouseover', () => {
-                        this.$bus.$emit('markContact', point.id);
-                    });
-                    this.markers[point.id].addListener('mouseout', () => {
-                        this.$bus.$emit('markContact', 0);
-                    });
+                let data = this.contacts;
+                if (!data.length) {
+                    data = this.defaultPosition();
+                    const center = { 
+                        lat: parseFloat(data[0].latitude),
+                        lng: parseFloat(data[0].longitude)
+                    };  
+                    const mapParams = {
+                        zoom: 10,
+                        center: new google.maps.LatLng(center),
+                        mapTypeId: google.maps.MapTypeId.ROADMAP,
+                        mapTypeControl: true,
+                        disableDoubleClickZoom: true,
+                        zoomControlOptions: true,
+                        streetViewControl: false
+                    };
+                    this.map = new google.maps.Map(document.getElementById('map'), mapParams);              
+                    for (const point of data) {
+                        this.markers[point.id] = new google.maps.Marker({
+                            position: {
+                                lat: parseFloat(point.latitude), 
+                                lng: parseFloat(point.longitude)
+                            },
+                            icon: this.icon,
+                            draggable: false,
+                            map: this.map,
+                            title: point.name
+                        });
+                        this.infoWindow[point.id] = new google.maps.InfoWindow({
+                            content: `${point.address}, ${point.number}
+                            ${point.neighborhood} - ${point.city}/${point.state}
+                            ${point.cep}
+                            `
+                        });
+                        this.markers[point.id].addListener('click', () => {
+                            this.infoWindow[point.id].open(this.map, this.markers[point.id]);
+                            this.$bus.$emit('checkContact', point.id);
+                        });
+                        this.infoWindow[point.id].addListener('closeclick', () => {
+                            this.$bus.$emit('checkContact', 0);
+                        });
+                        this.markers[point.id].addListener('mouseover', () => {
+                            this.$bus.$emit('markContact', point.id);
+                        });
+                        this.markers[point.id].addListener('mouseout', () => {
+                            this.$bus.$emit('markContact', 0);
+                        });
+                    }
+                } else {                            
+                    const center = { 
+                        lat: parseFloat(data[0].latitude),
+                        lng: parseFloat(data[0].longitude)
+                    };  
+                    const mapParams = {
+                        zoom: 10,
+                        center: new google.maps.LatLng(center),
+                        mapTypeId: google.maps.MapTypeId.ROADMAP,
+                        mapTypeControl: true,
+                        disableDoubleClickZoom: true,
+                        zoomControlOptions: true,
+                        streetViewControl: false
+                    };
+                    this.map = new google.maps.Map(document.getElementById('map'), mapParams);                 
+                    for (const point of data) {
+                        this.markers[point.id] = new google.maps.Marker({
+                            position: {
+                                lat: parseFloat(point.latitude), 
+                                lng: parseFloat(point.longitude)
+                            },
+                            icon: this.icon,
+                            draggable: false,
+                            map: this.map,
+                            title: point.name
+                        });
+                        this.infoWindow[point.id] = new google.maps.InfoWindow({
+                            content: `${point.address}, ${point.number}
+                            ${point.neighborhood} - ${point.city}/${point.state}
+                            ${point.cep}
+                            `
+                        });
+                        this.markers[point.id].addListener('click', () => {
+                            this.infoWindow[point.id].open(this.map, this.markers[point.id]);
+                            this.$bus.$emit('checkContact', point.id);
+                        });
+                        this.infoWindow[point.id].addListener('closeclick', () => {
+                            this.$bus.$emit('checkContact', 0);
+                        });
+                        this.markers[point.id].addListener('mouseover', () => {
+                            this.$bus.$emit('markContact', point.id);
+                        });
+                        this.markers[point.id].addListener('mouseout', () => {
+                            this.$bus.$emit('markContact', 0);
+                        });
+                    }
                 }
-            }, 2000);
+            }, 1000);
         },
         closePreviousInfoWindow() {
             for (const point of this.contacts) {
@@ -98,7 +149,7 @@ export default {
             };
         },
         defaultPosition() {
-            this.contacts = { 
+            return [{ 
                 id: 0, 
                 name: 'UEX Tecnologia', 
                 address: 'Rua Pasteur', 
@@ -109,7 +160,7 @@ export default {
                 cep: '80250-104', 
                 latitude: '-25.4437172', 
                 longitude: '-49.2789859'
-            }; 
+            }]; 
         }
     }
 }

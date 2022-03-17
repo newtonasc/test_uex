@@ -8,7 +8,7 @@
 			</b-row>
 			<b-row>
 				<b-col>	
-					<b-form-select id="contactType" v-model="selectedContactType" :options="listContactTypes" :disabled="loadingContactTypeList"></b-form-select>
+					<b-form-select id="contactType" v-model="selectedContactType" :options="listContactTypes" :disabled="loadingContactTypeList" @input="changeContactType"></b-form-select>
 				</b-col>
 			</b-row>
 			<b-row>
@@ -17,8 +17,12 @@
 				</b-col>
 			</b-row>
 			<b-row>
-				<b-col>
-					<b-form-input id="search" placeholder="Nome, CPF, Telefone"></b-form-input>
+				<b-col cols="9">
+					<b-form-input id="search" placeholder="Nome, CPF, Telefone" v-model="termSearch"></b-form-input>
+				</b-col>
+				<b-col cols="3" class="text-right">
+					<b-button variant="success" size="sm" @click="sentSearch"><b-icon icon="search"></b-icon></b-button>
+					<b-button variant="dark" size="sm" @click="cleanSearch"><b-icon icon="x"></b-icon></b-button>
 				</b-col>
 			</b-row>
 			<b-row>
@@ -33,8 +37,8 @@
 							</div>
 						</template>
 						<template v-else>
-							<template v-if="!listContacts">
-								<div class="text-muted">Nenhum contato cadastrado.</div>
+							<template v-if="listContacts.length == 0">
+								<div class="text-muted text-center">Nenhum contato cadastrado.</div>
 							</template>
 							<template v-else>
 							<ul v-for="(contact, index) in listContacts" :key="index">  
@@ -44,7 +48,7 @@
 										<b-col cols="3" class="text-right"><b-button variant="link" size="sm" @click="edit(contact)"><b-icon icon="pencil"></b-icon></b-button></b-col>
 									</b-row>
 									<b-row>
-										<b-col cols="9" @click="selectContact(contact.id)" @dblclick="edit(contact)"><small class="text-muted">{{ contact.cpf }}</small></b-col>
+										<b-col cols="9" @click="selectContact(contact.id)" @dblclick="edit(contact)"><small class="text-muted">{{ contact.cpf }} {{ contact.phone }}</small></b-col>
 										<b-col cols="3" class="text-right"><b-button variant="link" size="sm" @click="modalDelete(contact)"><b-icon icon="trash"></b-icon></b-button></b-col>
 									</b-row>
 								</li>

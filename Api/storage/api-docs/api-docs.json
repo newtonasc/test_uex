@@ -1,0 +1,40 @@
+{
+    "openapi": "3.0.0",
+    "paths": {
+        "contact-types": {
+            "get": {
+                "tags": [
+                    "Contact types"
+                ],
+                "summary": "Lista de tipos de contato",
+                "operationId": "f2c406f768a54f6a159d9b1476444af6",
+                "responses": {
+                    "200": {
+                        "description": "Tipos de contato encontrados.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "Id do tipo",
+                                            "type": "string"
+                                        },
+                                        "name": {
+                                            "description": "Nome do tipo",
+                                            "type": "string",
+                                            "example": "Cliente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}

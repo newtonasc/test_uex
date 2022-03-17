@@ -40,7 +40,15 @@ export default {
             loadingContactTypeList: false,
             listContactTypes: [],
             urlApi: 'http://localhost:8000/api',
-            mapsApiKey: process.env.VUE_APP_MAP_KEY
+            mapsApiKey: 'AIzaSyDkRfQvApdiHD2NGc49Agpa8WflYjwgMCQ',
+            errorFields: {
+                name: false,
+                cpf: false,
+                phone: false,
+                type_id: false,
+                address: false
+            },
+            noValidate: ['latitude', 'longitude', 'neighborhood', 'city', 'state', 'cep']
         }
     },
 
@@ -60,6 +68,13 @@ export default {
                 latitude: '',
                 longitude: '',
                 type_id: ''
+            };
+            this.errorFields = {
+                name: false,
+                cpf: false,
+                phone: false,
+                type_id: false,
+                address: false
             };
         },
         prepareData(data) {
@@ -148,8 +163,8 @@ export default {
                             if (!gcity || !gstate) separator = '';
                             this.form.address = `${gcity}${separator}${gstate}`;
                             this.form.number = '';
-                            this.form.neighborhood = '';
-                            this.form.cep = '';
+                            this.form.neighborhood = 'Centro';
+                            this.form.cep = '000000-000';
                         } 
                         if (gstate) {   
                             this.form.state = gstate;
@@ -207,8 +222,21 @@ export default {
             this.$snotify[type](body, title, config);
         },
         errorHandler(error) {
-            this.displayNotification('error', error, 'Campo requerido');
-            console.log(error)
+            Array.prototype.difference = function(e) {
+                return this.filter(function(i) { return e.indexOf(i) < 0; });
+            };
+            const keys = Object.keys(error);
+            const values = Object.values(error);
+            const notify = keys.difference(this.noValidate);
+            for (let index = 0; index < values.length; index ++) {
+                if (this.noValidate.indexOf(keys[index]) === -1 ) {
+                    this.displayNotification('error', values[index][0], 'Campo requerido');
+                    this.errorFields[keys[index]] = true;
+                }
+            };
+        },
+        cleanError(field) {
+            this.errorFields[field] = false;
         }        
     }    
 }

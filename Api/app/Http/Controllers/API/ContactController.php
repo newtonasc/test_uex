@@ -50,7 +50,8 @@ class ContactController extends BaseController {
      *          @OA\MediaType(
      *              mediaType="application/json",
      *              @OA\Schema(
-     *                  @OA\Property(property="termo", type="string", description="Termo as ser pesquisado")
+     *                  @OA\Property(property="search", type="string", description="Termo a ser encontrado")
+     *                  @OA\Property(property="filter", type="string", description="Termo a ser filtrado")
      *              )
      *          )
      *      },
@@ -79,8 +80,18 @@ class ContactController extends BaseController {
      * @return JsonResponse
      */
     public function search(Request $request): JsonResponse {
-        $term = $request->input('termo');
-        $contacts = Contact::where('name', 'LIKE', '%'.$term.'%')->OrWhere('cpf', 'LIKE', '%'.$term.'%')->OrWhere('phone', 'LIKE', '%'.$term.'%')->get();
+        $term = $request->input('term');
+        $filter = $request->input('filter');
+        $contacts = Contact::where(function ($query) use ($filter) {
+            if ($filter > 0) $query->where('type_id', intval($filter));
+        })
+        ->where(function ($query) use ($term) {
+            $query->OrWhere('name', 'LIKE', '%'.$term.'%')
+            ->OrWhere('cpf', 'LIKE', '%'.$term.'%')
+            ->OrWhere('phone', 'LIKE', '%'.$term.'%')
+            ->OrWhere('city', 'LIKE', '%'.$term.'%')
+            ->OrWhere('state', 'LIKE', '%'.$term.'%');
+        })->get();
         return $this->sendResponse(ContactResource::collection($contacts), 'Contatos encontrados.');
     }   
     
@@ -92,7 +103,7 @@ class ContactController extends BaseController {
      *          @OA\MediaType(
      *              mediaType="application/json",
      *              @OA\Schema(
-     *                  @OA\Property(property="termo", type="string", description="Termo as ser filtrado")
+     *                  @OA\Property(property="term", type="string", description="Termo as ser filtrado")
      *              )
      *          )
      *      },
@@ -121,8 +132,8 @@ class ContactController extends BaseController {
      * @return JsonResponse
      */
     public function filter(Request $request): JsonResponse {
-        $term = $request->input('termo');
-        $contacts = Contact::where('type_id', $term)->get();
+        $filter = $request->input('filter');
+        $contacts = Contact::where('type_id', $filter)->get();
         return $this->sendResponse(ContactResource::collection($contacts), 'Contatos encontrados.');
     }   
 
@@ -177,7 +188,8 @@ class ContactController extends BaseController {
             'state' => 'required',
             'cep' => 'required',
             'latitude' => 'required',
-            'longitude' => 'required'
+            'longitude' => 'required',
+            'type_id' => 'required'
         ]);
         if($validator->fails()){
             return $this->sendError($validator->errors());       
@@ -238,7 +250,8 @@ class ContactController extends BaseController {
             'state' => 'required',
             'cep' => 'required',
             'latitude' => 'required',
-            'longitude' => 'required'
+            'longitude' => 'required',
+            'type_id' => 'required'
         ]);
         if($validator->fails()){
             return $this->sendError($validator->errors());       
@@ -253,7 +266,8 @@ class ContactController extends BaseController {
         $contact->state = $input['state'];
         $contact->cep = $input['cep'];
         $contact->latitude = $input['latitude'];
-        $contact->longitude = $input['longitude'];        
+        $contact->longitude = $input['longitude'];  
+        $contact->type_id = $input['type_id'];        
         $contact->save();        
         return $this->sendResponse(new ContactResource($contact), 'Contato atualizado.');
     }

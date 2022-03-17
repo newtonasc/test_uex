@@ -8,53 +8,58 @@
                 <b-row>
                     <b-col cols="12">
                         <b-form-group label="Nome:" label-for="name">
-                            <b-form-input id="name" v-model="form.name" placeholder="Nome" maxlength="150" required></b-form-input>
+                            <b-form-input :class="errorFields.name ? 'field-error' : ''" id="name" v-model="form.name" placeholder="Nome" maxlength="150" @keyup="cleanError('name')" required></b-form-input>
                         </b-form-group>
                     </b-col>
                 </b-row>
                 <b-row>
                     <b-col cols="4">
                         <b-form-group label="CPF:" label-for="cpf">
-                            <b-form-input :disabled="type == 'edit'" id="cpf" v-model="form.cpf" placeholder="CPF" v-mask="'###.###.###-##'" required></b-form-input>
+                            <b-form-input :class="errorFields.cpf ? 'field-error' : ''" :disabled="type == 'edit'" id="cpf" v-model="form.cpf" placeholder="CPF" v-mask="'###.###.###-##'" @keyup="cleanError('cpf')" required></b-form-input>
                         </b-form-group>
                     </b-col>
                     <b-col cols="4">
                         <b-form-group label="Celular:" label-for="phone">
-                            <b-form-input id="phone" v-model="form.phone" placeholder="Celular" required v-mask="'(##) #####-####'"></b-form-input>
+                            <b-form-input :class="errorFields.phone ? 'field-error' : ''" id="phone" v-model="form.phone" placeholder="Celular" v-mask="'(##) #####-####'" @keyup="cleanError('phone')" required></b-form-input>
                         </b-form-group>
                     </b-col>
                     <b-col cols="4">
                         <b-form-group label="Tipo:" label-for="type">
-                            <b-form-select id="type" v-model="form.type_id" :options="listContactTypes" :disabled="loadingContactTypeList"></b-form-select>
+                            <b-form-select :class="errorFields.type ? 'field-error' : ''" id="type" v-model="form.type_id" :options="listContactTypes" :disabled="loadingContactTypeList" @keyup="cleanError('type_id')"></b-form-select>
                         </b-form-group>
                     </b-col>
                 </b-row>
                 <b-row>
                     <b-col>
                         <b-form-group label="Endereço:" label-for="address">
-                            <b-form-input id="address" v-model="form.address" placeholder="Endereço" maxlength="150" @change="changedAddress" required></b-form-input>
+                            <b-form-input :class="errorFields.address ? 'field-error' : ''" id="address" v-model="form.address" placeholder="Endereço" maxlength="150" @change="changedAddress" @keyup="cleanError('address')" required></b-form-input>
                         </b-form-group>
                     </b-col>
                 </b-row>
                 <b-row>
-                    <b-col cols="8">
+                    <b-col cols="9">
                         <b-form-group label="Bairro:" label-for="neighborhood">
                             <b-form-input :disabled="true" id="neighborhood" v-model="form.neighborhood" placeholder="Bairro" required></b-form-input>
                         </b-form-group>
                     </b-col>
-                    <b-col cols="4">
-                        <b-form-group label="Cidade:" label-for="city">
-                            <b-form-input :disabled="true" id="city" v-model="form.city" placeholder="Cidade" required></b-form-input>
+                    <b-col cols="3">
+                        <b-form-group label="Número:" label-for="number">
+                            <b-form-input :disabled="true" id="number" v-model="form.number" placeholder="Número" required></b-form-input>
                         </b-form-group>
                     </b-col>
                 </b-row>
-                 <b-row>    
-                    <b-col cols="8">
+                 <b-row>
+                     <b-col cols="5">
+                        <b-form-group label="Cidade:" label-for="city">
+                            <b-form-input :disabled="true" id="city" v-model="form.city" placeholder="Cidade" required></b-form-input>
+                        </b-form-group>
+                    </b-col>    
+                    <b-col cols="5">
                         <b-form-group label="Estado:" label-for="state">
                             <b-form-input :disabled="true" id="state" v-model="form.state" placeholder="Estado" required></b-form-input>
                         </b-form-group>
                     </b-col>
-                    <b-col cols="4">
+                    <b-col cols="2">
                         <b-form-group label="CEP:" label-for="cep">
                             <b-form-input :disabled="true" id="cep" v-model="form.cep" placeholder="CEP" required v-mask="'#####-###'"></b-form-input>
                         </b-form-group>
