@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\ContactTypes;
+use App\Models\ContactType;
 
 class ContactTypeTableSeeder extends Seeder
 {
@@ -17,7 +17,7 @@ class ContactTypeTableSeeder extends Seeder
     {
         $types = ['Cliente', 'Parceiro', 'Fornecedor'];
         foreach ($types as $value) {
-            ContactTypes::create(['name' => $value]);
+            ContactType::create(['name' => $value]);
         }       
     }
 }
