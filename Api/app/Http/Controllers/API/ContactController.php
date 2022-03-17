@@ -38,7 +38,7 @@ class ContactController extends BaseController {
      * @return JsonResponse
      */
     public function index(): JsonResponse {
-        $contacts = Contact::all();
+        $contacts = Contact::orderBy('name', 'asc')->get();
         return $this->sendResponse(ContactResource::collection($contacts), 'Contatos encontrados.');
     }   
     
@@ -91,7 +91,7 @@ class ContactController extends BaseController {
             ->OrWhere('phone', 'LIKE', '%'.$term.'%')
             ->OrWhere('city', 'LIKE', '%'.$term.'%')
             ->OrWhere('state', 'LIKE', '%'.$term.'%');
-        })->get();
+        })->orderBy('name', 'asc')->get();
         return $this->sendResponse(ContactResource::collection($contacts), 'Contatos encontrados.');
     }   
     
@@ -133,7 +133,7 @@ class ContactController extends BaseController {
      */
     public function filter(Request $request): JsonResponse {
         $filter = $request->input('filter');
-        $contacts = Contact::where('type_id', $filter)->get();
+        $contacts = Contact::where('type_id', $filter)->orderBy('name', 'asc')->get();
         return $this->sendResponse(ContactResource::collection($contacts), 'Contatos encontrados.');
     }   
 

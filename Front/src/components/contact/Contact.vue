@@ -18,9 +18,9 @@
 			</b-row>
 			<b-row>
 				<b-col cols="9">
-					<b-form-input id="search" placeholder="Nome, CPF, Telefone" v-model="termSearch"></b-form-input>
+					<b-form-input id="search" placeholder="Termo da pesquisa" v-model="termSearch"></b-form-input>
 				</b-col>
-				<b-col cols="3" class="text-right">
+				<b-col cols="3" class="content-buttons text-right">
 					<b-button variant="success" size="sm" @click="sentSearch"><b-icon icon="search"></b-icon></b-button>
 					<b-button variant="dark" size="sm" @click="cleanSearch"><b-icon icon="x"></b-icon></b-button>
 				</b-col>

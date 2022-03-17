@@ -156,7 +156,7 @@ export default {
             this.loadContactList();
         },
         changeContactType() {
-            if (this.selectedContactType == 0) return this.loadContacTypetList();
+            if (this.selectedContactType == 0) return this.loadContactList();
             this.loadingContactList = true;
             axios({
                 url: `${this.urlApi}/contacts/filter`,
